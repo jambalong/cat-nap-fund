@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cream: 253 246 236;
+  --card: 255 252 247;
+  --peach: 246 169 140;
+  --sage: 138 171 130;
+  --rose: 214 140 150;
+  --ink: 84 58 44;
+  --muted: 120 94 80;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cream: 38 31 43;
+    --card: 52 43 58;
+    --peach: 240 160 130;
+    --sage: 150 190 145;
+    --rose: 224 150 165;
+    --ink: 248 238 226;
+    --muted: 205 190 180;
+  }
+}
+body {
+  @apply bg-cream text-ink font-display;
+  margin: 0;
+}
+:focus-visible {
+  outline: 3px solid rgb(var(--rose));
+  outline-offset: 2px;
+}
+@keyframes zfloat {
+  0% { opacity: 0; transform: translateY(6px) scale(0.8); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-18px) scale(1.1); }
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-4deg); }
+  75% { transform: rotate(4deg); }
+}
+@keyframes sparkle {
+  0% { opacity: 0; transform: scale(0) rotate(0); }
+  50% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.4) rotate(90deg); }
+}
+.z-float { animation: zfloat 3s ease-in-out infinite; }
+.wiggle { animation: wiggle 0.6s ease-in-out 3; transform-origin: center bottom; }
+.sparkle { animation: sparkle 1.4s ease-out forwards; }
+@media (prefers-reduced-motion: reduce) {
+  .z-float, .wiggle, .sparkle { animation: none; }
+  .z-float { opacity: 0.8; }
+}
