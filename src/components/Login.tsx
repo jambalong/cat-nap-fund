@@ -1,0 +1,46 @@
+import { useState, type FormEvent } from 'react'
+import type { SignInResult } from '../data/auth'
+import { CatMascot } from './CatMascot'
+
+interface Props {
+  onSubmit: (email: string) => Promise<SignInResult>
+}
+
+const MESSAGES: Record<SignInResult, string> = {
+  sent: 'Check your inbox — a cozy magic link is on its way 🐾',
+  'not-invited': "Hmm, this nap spot is invite-only and that email isn't on the list. Ask John to add you 🐱",
+  error: 'Something went wrong. Please try again in a moment.',
+}
+
+export function Login({ onSubmit }: Props) {
+  const [email, setEmail] = useState('')
+  const [result, setResult] = useState<SignInResult | null>(null)
+  const [busy, setBusy] = useState(false)
+
+  async function submit(e: FormEvent) {
+    e.preventDefault()
+    setBusy(true)
+    setResult(await onSubmit(email))
+    setBusy(false)
+  }
+
+  return (
+    <main className="mx-auto flex min-h-screen max-w-sm flex-col items-center justify-center gap-6 p-6 text-center">
+      <CatMascot className="h-32 w-44" />
+      <h1 className="text-3xl font-semibold">Cat Nap Fund</h1>
+      <p className="text-muted">Sign in with a magic link to peek at your shared jars.</p>
+      <form onSubmit={submit} className="flex w-full flex-col gap-3">
+        <label className="text-left text-sm font-medium" htmlFor="login-email">Email</label>
+        <input
+          id="login-email" type="email" required autoComplete="email" value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="rounded-2xl border-2 border-peach/60 bg-card px-4 py-3 text-ink"
+        />
+        <button disabled={busy} className="rounded-2xl bg-peach px-4 py-3 font-semibold text-[#3b2619] shadow-soft disabled:opacity-60">
+          {busy ? 'Sending…' : 'Send magic link'}
+        </button>
+      </form>
+      {result && <p role="status" className="rounded-2xl bg-card p-3 shadow-soft">{MESSAGES[result]}</p>}
+    </main>
+  )
+}

@@ -52,3 +52,8 @@ body {
   .z-float, .wiggle, .sparkle { animation: none; }
   .z-float { opacity: 0.8; }
 }
+
+.evening-only { display: none; }
+@media (prefers-color-scheme: dark) {
+  .evening-only { display: inline; }
+}
