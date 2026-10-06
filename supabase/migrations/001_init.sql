@@ -73,6 +73,12 @@ create policy "allowed all" on transactions for all to authenticated using (is_a
 create policy "allowed all" on settings for all to authenticated using (is_allowed()) with check (is_allowed());
 create policy "allowed all" on checklist_items for all to authenticated using (is_allowed()) with check (is_allowed());
 
+-- Explicit grants so this works even when "Automatically expose new tables" is off.
+-- Row Level Security above still limits every row to allowlisted emails.
+grant usage on schema public to anon, authenticated;
+grant select, insert, update, delete on goals, transactions, settings, checklist_items to authenticated;
+grant select on allowed_users to authenticated;
+
 -- Realtime
 alter publication supabase_realtime add table goals, transactions, settings, checklist_items;
 
