@@ -13,7 +13,7 @@ function Dashboard({ onSignOut }: { onSignOut?: () => void }) {
   return (
     <main className="mx-auto flex max-w-md flex-col gap-5 px-4 pb-10 pt-[max(1.5rem,env(safe-area-inset-top))]">
       <header className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Cat Nap Fund 🐾</h1>
+        <h1 className="text-2xl font-bold">Cat Nap Fund <span aria-hidden="true">❤️</span></h1>
         {onSignOut && <button onClick={onSignOut} className="rounded-xl px-2 py-1 text-sm underline">Sign out</button>}
       </header>
       {data.goals.map((g) => (
