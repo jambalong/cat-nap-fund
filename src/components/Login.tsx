@@ -1,9 +1,9 @@
 import { useState, type FormEvent } from 'react'
-import type { SignInResult } from '../data/auth'
+import type { SignInOutcome, SignInResult } from '../data/auth'
 import { CatMascot } from './CatMascot'
 
 interface Props {
-  onSubmit: (email: string) => Promise<SignInResult>
+  onSubmit: (email: string) => Promise<SignInOutcome>
 }
 
 const MESSAGES: Record<SignInResult, string> = {
@@ -14,13 +14,13 @@ const MESSAGES: Record<SignInResult, string> = {
 
 export function Login({ onSubmit }: Props) {
   const [email, setEmail] = useState('')
-  const [result, setResult] = useState<SignInResult | null>(null)
+  const [outcome, setOutcome] = useState<SignInOutcome | null>(null)
   const [busy, setBusy] = useState(false)
 
   async function submit(e: FormEvent) {
     e.preventDefault()
     setBusy(true)
-    setResult(await onSubmit(email))
+    setOutcome(await onSubmit(email))
     setBusy(false)
   }
 
@@ -40,7 +40,12 @@ export function Login({ onSubmit }: Props) {
           {busy ? 'Sending…' : 'Send magic link'}
         </button>
       </form>
-      {result && <p role="status" className="rounded-xl border border-surface bg-mantle p-3">{MESSAGES[result]}</p>}
+      {outcome && (
+        <p role="status" className="rounded-xl border border-surface bg-mantle p-3">
+          {MESSAGES[outcome.result]}
+          {outcome.detail && <span className="mt-1 block text-sm text-muted">Details: {outcome.detail}</span>}
+        </p>
+      )}
     </main>
   )
 }
