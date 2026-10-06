@@ -1,5 +1,4 @@
 export type GoalId = 'emergency' | 'moveout'
-export type Person = 'a' | 'b'
 export type TxType = 'deposit' | 'withdrawal'
 
 export interface Goal {
@@ -15,7 +14,6 @@ export interface Transaction {
   goalId: GoalId
   type: TxType
   amountCents: number
-  person: Person
   note: string
   /** ISO date (YYYY-MM-DD) */
   date: string
@@ -31,14 +29,10 @@ export interface ChecklistItem {
 }
 
 export interface Settings {
-  names: Record<Person, string>
   monthlyExpensesCents: number
 }
 
-export const DEFAULT_SETTINGS: Settings = {
-  names: { a: 'John', b: 'Partner' },
-  monthlyExpensesCents: 0,
-}
+export const DEFAULT_SETTINGS: Settings = { monthlyExpensesCents: 0 }
 
 export const DEFAULT_GOALS: Goal[] = [
   { id: 'emergency', name: 'Emergency Fund', targetCents: 1000000, targetDate: null },

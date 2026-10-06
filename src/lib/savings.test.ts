@@ -1,5 +1,5 @@
 import {
-  balanceCents, progressPercent, contributionsByPerson, contributionShares, sortNewestFirst,
+  balanceCents, progressPercent, sortNewestFirst,
   monthsUntil, monthlyNeededCents, highestMilestone, crossedMilestone, monthsCovered,
   checklistTotalCents, napMessage,
 } from './savings'
@@ -7,23 +7,16 @@ import type { Transaction } from './types'
 
 let n = 0
 const tx = (o: Partial<Transaction>): Transaction => ({
-  id: String(++n), goalId: 'emergency', type: 'deposit', amountCents: 1000, person: 'a',
+  id: String(++n), goalId: 'emergency', type: 'deposit', amountCents: 1000,
   note: '', date: '2026-01-01', createdAt: `2026-01-01T00:00:0${n % 10}Z`, ...o,
 })
 
-describe('balance & contributions', () => {
-  const txs = [tx({ amountCents: 5000 }), tx({ amountCents: 3000, person: 'b' }), tx({ type: 'withdrawal', amountCents: 1000 })]
-  it('sums deposits minus withdrawals', () => expect(balanceCents(txs)).toBe(7000))
-  it('splits per person', () => expect(contributionsByPerson(txs)).toEqual({ a: 4000, b: 3000 }))
-  it('computes shares', () => {
-    const s = contributionShares(txs)
-    expect(s.a).toBeCloseTo(4 / 7)
-    expect(s.b).toBeCloseTo(3 / 7)
+describe('balance', () => {
+  it('sums deposits minus withdrawals', () => {
+    const txs = [tx({ amountCents: 5000 }), tx({ amountCents: 3000 }), tx({ type: 'withdrawal', amountCents: 1000 })]
+    expect(balanceCents(txs)).toBe(7000)
   })
-  it('shares are zero with no contributions', () => expect(contributionShares([])).toEqual({ a: 0, b: 0 }))
-  it('negative net counts as zero share', () => {
-    expect(contributionShares([tx({ type: 'withdrawal', person: 'a' }), tx({ person: 'b' })])).toEqual({ a: 0, b: 1 })
-  })
+  it('is zero with no transactions', () => expect(balanceCents([])).toBe(0))
 })
 
 describe('progress', () => {

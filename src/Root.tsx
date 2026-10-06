@@ -19,7 +19,7 @@ function Authed({ session }: { session: Session }) {
       <main className="mx-auto max-w-sm p-6 text-center">
         <h1 className="text-2xl font-semibold">Not on the guest list 🐱</h1>
         <p className="my-4">{session.user.email} hasn't been invited to this nap spot yet.</p>
-        <button onClick={() => void signOut()} className="rounded-2xl bg-peach px-4 py-3 font-semibold text-[#3b2619]">Sign out</button>
+        <button onClick={() => void signOut()} className="rounded-xl bg-accent px-4 py-3 font-semibold text-onaccent">Sign out</button>
       </main>
     )
   }

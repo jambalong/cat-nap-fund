@@ -5,12 +5,12 @@ A cozy, mobile-first PWA where two partners share and track two savings goals: a
 ## What it does
 
 - Two goal cards with an animated jar that fills as you save, plus a sleeping cat mascot (floating "z z z", wiggle and sparkle at 25/50/75/100% milestones; respects `prefers-reduced-motion`).
-- Add, edit and delete deposits and withdrawals (amount, who, note, date); history newest first.
-- Per-person contribution split; names are configurable in Settings.
+- Add, edit and delete deposits and withdrawals (amount, note, date); history newest first.
+- Shared by design: both invited emails read and write the same rows, so your partner sees exactly the same amounts you do, live.
 - Editable target and optional target date → "Save $X/month to get there on time."
 - Emergency helper: enter monthly expenses → "covers N months."
 - Move-out checklist: editable cost line items; one tap sets the goal target to the total.
-- Magic-link sign-in limited to two invited emails (RLS-enforced), realtime sync, installable PWA with offline shell, "evening mode" dark theme with a moon and stars.
+- Magic-link sign-in limited to two invited emails (RLS-enforced), realtime sync, installable PWA with offline shell, Catppuccin theme (Latte by day, Mocha in evening mode with a moon and stars).
 
 All money is stored as integer cents.
 

@@ -1,4 +1,4 @@
-# Cat Nap Fund — Tasks
+# Cat Nap Fund: Tasks
 
 - [x] 1. Scaffold: Vite+React+TS, Tailwind, Vitest+RTL, ESLint, `validate` script, theme tokens
 - [x] 2. Domain types + pure lib (money, progress, totals, split, projection, milestones, runway) with unit tests

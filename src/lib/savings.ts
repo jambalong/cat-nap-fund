@@ -1,4 +1,4 @@
-import type { Person, Transaction } from './types'
+import type { Transaction } from './types'
 
 export const MILESTONES = [25, 50, 75, 100] as const
 
@@ -10,22 +10,6 @@ export const balanceCents = (txs: Transaction[]): number => txs.reduce((s, t) =>
 export function progressPercent(balance: number, target: number): number {
   if (target <= 0) return 0
   return Math.max(0, Math.min(100, Math.floor((balance / target) * 100)))
-}
-
-/** Net contribution (deposits minus withdrawals) per person. */
-export function contributionsByPerson(txs: Transaction[]): Record<Person, number> {
-  const out: Record<Person, number> = { a: 0, b: 0 }
-  for (const t of txs) out[t.person] += signed(t)
-  return out
-}
-
-/** Share of the positive net total per person, as 0..1. Both 0 when nothing contributed. */
-export function contributionShares(txs: Transaction[]): Record<Person, number> {
-  const c = contributionsByPerson(txs)
-  const a = Math.max(0, c.a)
-  const b = Math.max(0, c.b)
-  const total = a + b
-  return total === 0 ? { a: 0, b: 0 } : { a: a / total, b: b / total }
 }
 
 export function sortNewestFirst(txs: Transaction[]): Transaction[] {
@@ -77,6 +61,6 @@ export const checklistTotalCents = (items: { amountCents: number }[]): number =>
 
 export function napMessage(percent: number): string {
   if (percent >= 100) return 'Purrfect! The nap fund is full 🐾'
-  if (percent === 0) return 'A fresh, empty jar — time for a first deposit 🐾'
+  if (percent === 0) return 'A fresh, empty jar. Time for a first deposit 🐾'
   return `You two are ${percent}% of the way to a cozy nap 🐾`
 }

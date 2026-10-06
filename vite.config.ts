@@ -8,13 +8,13 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icon.svg'],
+      includeAssets: ['cat.png'],
       manifest: {
         name: 'Cat Nap Fund',
         short_name: 'Cat Nap',
         description: 'Cozy shared savings goals for two.',
-        theme_color: '#f6a98c',
-        background_color: '#fdf6ec',
+        theme_color: '#1e1e2e',
+        background_color: '#1e1e2e',
         display: 'standalone',
         start_url: '/',
         icons: [

@@ -11,12 +11,11 @@ const setup = (repo = new InMemoryRepository()) => {
 }
 const card = async (name: string) => within(await screen.findByRole('article', { name: new RegExp(name) }))
 
-async function deposit(user: ReturnType<typeof userEvent.setup>, goal: string, amount: string, opts: { who?: string; note?: string } = {}) {
+async function deposit(user: ReturnType<typeof userEvent.setup>, goal: string, amount: string, opts: { note?: string } = {}) {
   const c = await card(goal)
   await user.click(c.getByRole('button', { name: 'Add deposit' }))
   const form = within(c.getByRole('form', { name: 'Add entry' }))
   await user.type(form.getByLabelText('Amount ($)'), amount)
-  if (opts.who) await user.selectOptions(form.getByLabelText('Who'), opts.who)
   if (opts.note) await user.type(form.getByLabelText(/Note/), opts.note)
   await user.click(form.getByRole('button', { name: 'Save' }))
 }
@@ -29,15 +28,14 @@ describe('dashboard', () => {
     expect(screen.getAllByText(/fresh, empty jar/).length).toBe(2)
   })
 
-  it('a deposit updates balance, progress, message, history and split', async () => {
+  it('a deposit updates balance, progress, message, and history', async () => {
     const { user } = setup()
-    await deposit(user, 'Emergency', '620', { who: 'Partner', note: 'tax refund' })
+    await deposit(user, 'Emergency', '620', { note: 'tax refund' })
     const c = await card('Emergency')
     expect(await c.findByTestId('emergency-balance')).toHaveTextContent('$620.00')
     expect(c.getByTestId('emergency-percent')).toHaveTextContent('6%')
     expect(c.getByText(/6% of the way to a cozy nap/)).toBeInTheDocument()
     expect(c.getByText(/tax refund/)).toBeInTheDocument()
-    expect(c.getByRole('img', { name: /Partner 100%/ })).toBeInTheDocument()
     expect(c.getByRole('img', { name: /Emergency Fund jar is 6% full/ })).toBeInTheDocument()
     // other goal untouched
     expect((await card('Move-Out')).getByTestId('moveout-balance')).toHaveTextContent('$0.00')
@@ -65,8 +63,8 @@ describe('dashboard', () => {
 
   it('lists newest first, and supports edit and delete', async () => {
     const repo = new InMemoryRepository()
-    await repo.addTransaction({ goalId: 'emergency', type: 'deposit', amountCents: 1000, person: 'a', note: 'older', date: '2026-01-01' })
-    await repo.addTransaction({ goalId: 'emergency', type: 'deposit', amountCents: 2000, person: 'a', note: 'newer', date: '2026-02-01' })
+    await repo.addTransaction({ goalId: 'emergency', type: 'deposit', amountCents: 1000, note: 'older', date: '2026-01-01' })
+    await repo.addTransaction({ goalId: 'emergency', type: 'deposit', amountCents: 2000, note: 'newer', date: '2026-02-01' })
     const { user } = setup(repo)
     const c = await card('Emergency')
     const items = c.getAllByRole('listitem')
@@ -87,7 +85,7 @@ describe('dashboard', () => {
   it('celebrates when a milestone is crossed, not on load', async () => {
     const repo = new InMemoryRepository()
     await repo.updateGoal('emergency', { targetCents: 10000 })
-    await repo.addTransaction({ goalId: 'emergency', type: 'deposit', amountCents: 2000, person: 'a', note: '', date: '2026-01-01' })
+    await repo.addTransaction({ goalId: 'emergency', type: 'deposit', amountCents: 2000, note: '', date: '2026-01-01' })
     const { user } = setup(repo)
     const c = await card('Emergency')
     expect(c.queryByText(/Milestone reached/)).not.toBeInTheDocument()
@@ -144,15 +142,21 @@ describe('dashboard', () => {
     expect(c.queryByDisplayValue('Movers')).not.toBeInTheDocument()
   })
 
-  it('configurable names flow into the forms and split', async () => {
+  it('has no per-person inputs: one shared jar, one person adding money', async () => {
     const { user } = setup()
-    await user.click(await screen.findByText('Settings'))
-    const second = screen.getByLabelText("Second person's name")
-    await user.clear(second)
-    await user.type(second, 'Mochi')
-    await user.click(screen.getByRole('button', { name: 'Save names' }))
-    await deposit(user, 'Emergency', '40', { who: 'Mochi' })
     const c = await card('Emergency')
-    expect(await c.findByText(/by Mochi/)).toBeInTheDocument()
+    await user.click(c.getByRole('button', { name: 'Add deposit' }))
+    expect(c.queryByLabelText('Who')).not.toBeInTheDocument()
+    expect(screen.queryByText(/contributed what/)).not.toBeInTheDocument()
+  })
+
+  it('a second session on the same repo sees the same balances', async () => {
+    const repo = new InMemoryRepository()
+    await repo.addTransaction({ goalId: 'moveout', type: 'deposit', amountCents: 123456, note: '', date: '2026-03-01' })
+    const first = render(<App repo={repo} />)
+    expect(await screen.findByTestId('moveout-balance')).toHaveTextContent('$1,234.56')
+    first.unmount()
+    render(<App repo={repo} />)
+    expect(await screen.findByTestId('moveout-balance')).toHaveTextContent('$1,234.56')
   })
 })

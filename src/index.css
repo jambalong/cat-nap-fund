@@ -3,31 +3,39 @@
 @tailwind utilities;
 
 :root {
-  --cream: 253 246 236;
-  --card: 255 252 247;
-  --peach: 246 169 140;
-  --sage: 138 171 130;
-  --rose: 214 140 150;
-  --ink: 84 58 44;
-  --muted: 120 94 80;
+  /* Catppuccin Latte */
+  --base: 239 241 245;
+  --mantle: 230 233 239;
+  --surface: 204 208 218;
+  --ink: 76 79 105;
+  --muted: 92 95 119;
+  --accent: 136 57 239;
+  --onaccent: 239 241 245;
+  --pink: 234 118 203;
+  --green: 64 160 43;
+  --red: 210 15 57;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --cream: 38 31 43;
-    --card: 52 43 58;
-    --peach: 240 160 130;
-    --sage: 150 190 145;
-    --rose: 224 150 165;
-    --ink: 248 238 226;
-    --muted: 205 190 180;
+    /* Catppuccin Mocha */
+    --base: 30 30 46;
+    --mantle: 24 24 37;
+    --surface: 69 71 90;
+    --ink: 205 214 244;
+    --muted: 166 173 200;
+    --accent: 203 166 247;
+    --onaccent: 17 17 27;
+    --pink: 245 194 231;
+    --green: 166 227 161;
+    --red: 243 139 168;
   }
 }
 body {
-  @apply bg-cream text-ink font-display;
+  @apply bg-base text-ink font-display;
   margin: 0;
 }
 :focus-visible {
-  outline: 3px solid rgb(var(--rose));
+  outline: 3px solid rgb(var(--accent));
   outline-offset: 2px;
 }
 @keyframes zfloat {

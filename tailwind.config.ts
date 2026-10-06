@@ -7,18 +7,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        cream: v('cream'),
-        card: v('card'),
-        peach: v('peach'),
-        sage: v('sage'),
-        rose: v('rose'),
+        base: v('base'),
+        mantle: v('mantle'),
+        surface: v('surface'),
         ink: v('ink'),
         muted: v('muted'),
+        accent: v('accent'),
+        onaccent: v('onaccent'),
+        pink: v('pink'),
+        green: v('green'),
+        red: v('red'),
       },
       fontFamily: {
-        display: ['Fredoka', 'Nunito', 'ui-rounded', 'system-ui', 'sans-serif'],
+        display: ['Nunito', 'ui-rounded', 'system-ui', 'sans-serif'],
       },
-      boxShadow: { soft: '0 6px 24px -8px rgb(var(--ink) / 0.25)' },
+      boxShadow: { soft: '0 1px 2px rgb(var(--ink) / 0.08)' },
     },
   },
 } satisfies Config

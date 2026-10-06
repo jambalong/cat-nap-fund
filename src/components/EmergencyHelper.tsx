@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { parseToCents } from '../lib/money'
 import { monthsCovered } from '../lib/savings'
 import { useSavings } from '../store'
-import { inputCls } from './TransactionForm'
+import { inputCls, primaryBtn } from './TransactionForm'
 
 export function EmergencyHelper({ balance }: { balance: number }) {
   const { data, repo } = useSavings()
@@ -16,17 +16,17 @@ export function EmergencyHelper({ balance }: { balance: number }) {
   }
 
   return (
-    <section aria-label="Emergency runway" className="rounded-2xl bg-cream p-3">
-      <h3 className="font-medium">How long would this last?</h3>
+    <section aria-label="Emergency runway" className="rounded-xl bg-base p-3">
+      <h3 className="font-semibold">How long would this last?</h3>
       <form onSubmit={submit} className="mt-2 flex items-end gap-2">
         <div className="flex-1">
-          <label htmlFor="monthly-expenses" className="text-sm font-medium">Monthly expenses ($)</label>
+          <label htmlFor="monthly-expenses" className="text-sm font-semibold">Monthly expenses ($)</label>
           <input id="monthly-expenses" inputMode="decimal" className={inputCls} value={value} onChange={(e) => setValue(e.target.value)} />
         </div>
-        <button className="rounded-2xl bg-sage px-4 py-2 font-semibold text-[#1f2b1c]">Save</button>
+        <button className={primaryBtn}>Save</button>
       </form>
       {covered !== null && (
-        <p className="mt-2 font-medium" data-testid="covers">Covers {covered} {covered === 1 ? 'month' : 'months'} of expenses 🐱</p>
+        <p className="mt-2 font-semibold" data-testid="covers">Covers {covered} {covered === 1 ? 'month' : 'months'} of expenses 🐱</p>
       )}
     </section>
   )

@@ -33,7 +33,7 @@ export class SupabaseRepository implements SavingsRepository {
   }
 
   async addTransaction(tx: NewTransaction): Promise<Transaction> {
-    const row = check(await this.db.from('transactions').insert(txToRow(tx)).select().single())
+    const row = check(await this.db.from('transactions').insert({ ...txToRow(tx), person: 'a' }).select().single())
     return txFromRow(row)
   }
 

@@ -1,6 +1,6 @@
 import { InMemoryRepository } from './inMemoryRepository'
 
-const base = { goalId: 'emergency', type: 'deposit', amountCents: 2500, person: 'a', note: 'x', date: '2026-01-02' } as const
+const base = { goalId: 'emergency', type: 'deposit', amountCents: 2500, note: 'x', date: '2026-01-02' } as const
 
 describe('InMemoryRepository', () => {
   it('starts with the two default goals', async () => {
@@ -23,11 +23,11 @@ describe('InMemoryRepository', () => {
   it('updates goals, settings and checklist', async () => {
     const r = new InMemoryRepository()
     await r.updateGoal('moveout', { targetCents: 123, targetDate: '2027-01-01' })
-    await r.saveSettings({ names: { a: 'J', b: 'K' }, monthlyExpensesCents: 5 })
+    await r.saveSettings({ monthlyExpensesCents: 5 })
     await r.saveChecklist([{ id: 'x', label: 'L', amountCents: 7 }])
     const d = await r.load()
     expect(d.goals[1]).toMatchObject({ targetCents: 123, targetDate: '2027-01-01' })
-    expect(d.settings.names.b).toBe('K')
+    expect(d.settings.monthlyExpensesCents).toBe(5)
     expect(d.checklist).toHaveLength(1)
   })
   it('returns copies, not live references', async () => {
