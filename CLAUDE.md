@@ -20,10 +20,3 @@ Vite + React + TypeScript, Tailwind 3, Vitest + React Testing Library, Supabase 
 
 ## Design theme
 Cozy cat nap: sleeping-cat photo cutout (`public/cat.png`, made by `scripts/cutout.mjs`) beside a filling jar, floating z's, paw prints, sleepy microcopy. Catppuccin palette as CSS variables in `src/index.css` (Latte light, Mocha dark via system setting, which also shows moon/stars) mapped to Tailwind tokens (base, mantle, surface, ink, muted, accent, pink, green, red). Flat, clean cards with a 1px border and a barely visible shadow. Nunito font with system fallback. Never use em dashes in copy or docs. Respect `prefers-reduced-motion`; keep WCAG AA contrast, labeled inputs, visible focus.
-
-## Git
-- Identity: `John Alvin Ambalong <119690431+jambalong@users.noreply.github.com>`.
-- Conventional commits (feat/fix/test/chore/docs).
-- NO trailers: no `Co-Authored-By`, no "Generated with Claude Code" in commits or PR descriptions.
-- Icons: `scripts/make-icons.mjs` renders the cat on a Catppuccin tile to PNGs (one-off).
-- The app is for one contributor and one viewer: data is shared, there is no per-person split.
