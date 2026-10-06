@@ -16,9 +16,10 @@ export function MoveOutChecklist() {
   const patch = (id: string, p: Partial<Row>) => setRows(rows.map((r) => (r.id === id ? { ...r, ...p } : r)))
 
   return (
-    <section aria-label="Move-out costs" className="rounded-xl bg-base p-3">
-      <h3 className="font-semibold">Move-out cost checklist</h3>
-      <ul className="mt-2 flex flex-col gap-2">
+    <details aria-label="Move-out costs">
+      <summary className="cursor-pointer font-semibold">Move-out cost checklist ({formatCents(total)})</summary>
+      <div className="mt-2 rounded-xl bg-base p-3">
+      <ul className="flex flex-col gap-2">
         {rows.map((r) => (
           <li key={r.id} className="flex items-end gap-2">
             <div className="flex-1">
@@ -49,6 +50,7 @@ export function MoveOutChecklist() {
           Use total as goal target
         </button>
       </div>
-    </section>
+      </div>
+    </details>
   )
 }

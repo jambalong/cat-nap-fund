@@ -133,6 +133,12 @@ describe('dashboard', () => {
     expect(await c.findByText(/of \$3,500\.50/)).toBeInTheDocument()
   })
 
+  it('keeps the checklist collapsed until opened and shows its total in the header', async () => {
+    setup()
+    const summary = (await screen.findByText(/Move-out cost checklist \(\$0\.00\)/)).closest('details')
+    expect(summary).not.toHaveAttribute('open')
+  })
+
   it('checklist items can be added and removed', async () => {
     const { user } = setup()
     const c = await card('Move-Out')
