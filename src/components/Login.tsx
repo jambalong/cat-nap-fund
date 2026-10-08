@@ -4,6 +4,7 @@ import { CatMascot } from './CatMascot'
 
 interface Props {
   onSubmit: (email: string) => Promise<SignInOutcome>
+  onVerify: (email: string, code: string) => Promise<SignInOutcome>
 }
 
 const MESSAGES: Record<SignInResult, string> = {
@@ -12,15 +13,24 @@ const MESSAGES: Record<SignInResult, string> = {
   error: 'Something went wrong. Please try again in a moment.',
 }
 
-export function Login({ onSubmit }: Props) {
+export function Login({ onSubmit, onVerify }: Props) {
   const [email, setEmail] = useState('')
   const [outcome, setOutcome] = useState<SignInOutcome | null>(null)
   const [busy, setBusy] = useState(false)
+  const [code, setCode] = useState('')
+  const [codeOutcome, setCodeOutcome] = useState<SignInOutcome | null>(null)
 
   async function submit(e: FormEvent) {
     e.preventDefault()
     setBusy(true)
     setOutcome(await onSubmit(email))
+    setBusy(false)
+  }
+
+  async function verify(e: FormEvent) {
+    e.preventDefault()
+    setBusy(true)
+    setCodeOutcome(await onVerify(email, code))
     setBusy(false)
   }
 
@@ -45,6 +55,27 @@ export function Login({ onSubmit }: Props) {
           {MESSAGES[outcome.result]}
           {outcome.detail && <span className="mt-1 block text-sm text-muted">Details: {outcome.detail}</span>}
         </p>
+      )}
+      {outcome?.result === 'sent' && (
+        <form onSubmit={verify} className="flex w-full flex-col gap-3">
+          <p className="text-sm text-muted">
+            Installed the app on your phone? Links open in Safari, so type the code from the email here instead.
+          </p>
+          <label className="text-left text-sm font-semibold" htmlFor="login-code">Code from the email</label>
+          <input
+            id="login-code" inputMode="numeric" autoComplete="one-time-code" required value={code}
+            onChange={(e) => setCode(e.target.value)}
+            className="rounded-xl border border-surface bg-mantle px-4 py-3 text-center text-xl tracking-widest text-ink"
+          />
+          <button disabled={busy} className="rounded-xl border border-accent px-4 py-3 font-semibold disabled:opacity-60">
+            Sign in with code
+          </button>
+          {codeOutcome?.result === 'error' && (
+            <p role="alert" className="text-sm font-semibold text-red">
+              That code didn't work. It may have expired, so request a new one. ({codeOutcome.detail})
+            </p>
+          )}
+        </form>
       )}
     </main>
   )

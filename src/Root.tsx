@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import App from './App'
-import { amIInvited, getSession, onAuthChange, sendMagicLink, signOut } from './data/auth'
+import { amIInvited, getSession, onAuthChange, sendMagicLink, signOut, verifyCode } from './data/auth'
 import { SupabaseRepository } from './data/supabaseRepository'
 import { isSupabaseConfigured, supabase } from './data/supabaseClient'
 import { Login } from './components/Login'
@@ -37,6 +37,6 @@ export default function Root() {
 
   if (!isSupabaseConfigured) return <App />
   if (session === undefined) return <p className="p-6" role="status">Waking the cat…</p>
-  if (!session) return <Login onSubmit={sendMagicLink} />
+  if (!session) return <Login onSubmit={sendMagicLink} onVerify={verifyCode} />
   return <Authed session={session} />
 }

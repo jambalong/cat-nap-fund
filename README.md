@@ -45,6 +45,15 @@ Anyone else gets a friendly "not invited" message, and RLS blocks all data acces
 ### 4. Set auth redirect URLs
 In **Authentication → URL Configuration**, set **Site URL** to your Vercel URL (e.g. `https://cat-nap-fund.vercel.app`) and add it, plus `http://localhost:5173`, under **Redirect URLs**. Email auth (magic link) is enabled by default.
 
+### 4b. Add the sign-in code to the email (needed for the installed iOS app)
+Links in emails open in Safari, and an installed home-screen app cannot see that session. So the app also accepts the 6-digit code from the same email. In **Authentication → Emails → Magic Link**, make sure the body contains `{{ .Token }}`, for example:
+
+```html
+<h2>Your Cat Nap Fund sign-in</h2>
+<p><a href="{{ .ConfirmationURL }}">Sign in</a></p>
+<p>Or enter this code in the app: <strong>{{ .Token }}</strong></p>
+```
+
 ### 5. Deploy to Vercel
 1. Push this repo to GitHub and import it at <https://vercel.com/new> (framework preset: Vite).
 2. Add environment variables `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
@@ -54,4 +63,4 @@ In **Authentication → URL Configuration**, set **Site URL** to your Vercel URL
 - **iOS (Safari):** open the site → Share → **Add to Home Screen**.
 - **Android (Chrome):** open the site → menu (⋮) → **Install app** / **Add to Home screen**.
 
-Sign in once with the magic link on each device (open the link in the browser you'll install from).
+On iOS, open the installed app, request the email, and type the code from it into the app. The link would open in Safari instead.

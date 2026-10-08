@@ -22,6 +22,17 @@ export async function sendMagicLink(email: string): Promise<SignInOutcome> {
   return error ? { result: 'error', detail: error.message } : { result: 'sent' }
 }
 
+/** Signs in with the code from the email. Works inside an installed iOS app, where links open in Safari instead. */
+export async function verifyCode(email: string, code: string): Promise<SignInOutcome> {
+  if (!supabase) return { result: 'error', detail: 'Supabase is not configured' }
+  const { error } = await supabase.auth.verifyOtp({
+    email: email.trim().toLowerCase(),
+    token: code.replace(/\s/g, ''),
+    type: 'email',
+  })
+  return error ? { result: 'error', detail: error.message } : { result: 'sent' }
+}
+
 export const signOut = () => supabase?.auth.signOut()
 
 export async function getSession(): Promise<Session | null> {
