@@ -36,7 +36,7 @@ export function Login({ onSubmit, onVerify }: Props) {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-sm flex-col items-center justify-center gap-6 p-6 text-center">
-      <CatMascot className="h-32 w-44" />
+      <CatMascot className="w-56 pt-6" />
       <h1 className="text-3xl font-semibold">Cat Nap Fund</h1>
       <p className="text-muted">Sign in with a magic link to peek at your shared jars.</p>
       <form onSubmit={submit} className="flex w-full flex-col gap-3">
